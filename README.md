@@ -6,6 +6,7 @@ This repository contains updated credential checking configurations for major re
 
 - `kohls-2025.loli` - Updated Kohl's configuration for 2025 with modern anti-detection measures
 - `bathandbodyworks-2025.loli` - Bath & Body Works configuration for 2025 with 4-block authentication flow
+- `subway-2025.loli` - Subway MVP Rewards configuration for 2025 with 5-block authentication flow
 
 ## Key Updates in 2025 Versions
 
@@ -45,6 +46,28 @@ This repository contains updated credential checking configurations for major re
 - **Points Balance**: Captures loyalty points total
 - **Member Tier**: Identifies membership level (regular, VIP, etc.)
 
+### Subway Config (`subway-2025.loli`)
+#### Multi-Block Authentication Flow
+- **Session Setup Block**: GET request to signin page for session establishment and CSRF tokens
+- **Email Validation Block**: POST to validate email exists before login attempt
+- **Main Login Block**: POST with credentials and comprehensive anti-detection measures
+- **MVP Rewards Verification Block**: GET to confirm rewards account status and access
+- **Account Data Block**: GET to retrieve MVP Rewards balance and account details
+
+#### Security Features
+- **Modern Chrome 131 Simulation**: Current User-Agent and browser fingerprinting
+- **Comprehensive Cookie Management**: Session, tracking, and authentication cookies
+- **CSRF Token Handling**: Dynamic token extraction and submission
+- **reCAPTCHA Integration**: Prepared for reCAPTCHA challenges
+- **Advanced Headers**: Modern Sec-Fetch-* and security headers
+
+#### Capture Capabilities
+- **MVP Points**: Extracts current loyalty points total
+- **Rewards Balance**: Captures available rewards dollar amount
+- **Tier Status**: Identifies membership level (regular, MVP, etc.)
+- **Free Subs Available**: Number of free sandwiches earned
+- **Points Expiry**: Expiration date for accumulated points
+
 ## Usage
 
 This configuration is designed for educational and security research purposes only. Users must comply with all applicable terms of service and legal requirements.
@@ -57,3 +80,6 @@ This configuration is designed for educational and security research purposes on
 
 ### Bath & Body Works
 - **v1.0.0 [2025]** - Initial release with 4-block authentication flow and modern anti-detection
+
+### Subway
+- **v1.0.0 [2025]** - Initial release with 5-block authentication flow and MVP Rewards capture
