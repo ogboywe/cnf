@@ -46,6 +46,11 @@ james21trill@icloud.com:Easypass1!
 - Contact user immediately to confirm 2FA code from their email
 - May need to implement 2FA bypass or manual intervention workflow
 
+**Challenge Validation Page**
+- If you see "Challenge Validation" page instead of login, this is Subway's bot protection
+- The config now includes a challenge validation block with 5-second delay
+- May need to adjust delay timing based on challenge complexity
+
 **Access Denied / Rate Limiting**
 - Increase proxy rotation frequency
 - Reduce bot count

