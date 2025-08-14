@@ -66,11 +66,6 @@ FUNCTION RandomString
   INPUT "32"
   -> VAR "sensor_id"
 
-FUNCTION Hash
-  INPUT "<USER><PASS><sensor_id>"
-  FUNCTION "MD5"
-  -> VAR "sensor_hash"
-
 FUNCTION RandomString
   INPUT "64"
   -> VAR "abck_value"
@@ -79,7 +74,7 @@ FUNCTION RandomString
   INPUT "16"
   -> VAR "bm_sz_value"
 
-SET "_abck" "<abck_value>~0~YAAQBwAQABCDEFGHIJKLMNOPQRSTUVWXYZ~<sensor_hash>"
+SET "_abck" "<abck_value>~0~YAAQBwAQABCDEFGHIJKLMNOPQRSTUVWXYZ~<sensor_id>"
 SET "bm_sz" "<bm_sz_value>"
 
 REQUEST GET "https://id.subway.com/02d64b66-5494-461d-8e0d-5c72dc1efa7f/oauth2/v2.0/authorize?response_type=code&code_challenge_method=S256&scope=openid%20offline_access%20profile&code_challenge=OIEX9QUkfPmGzyjfPhTvptlBWdsZvKV4tN4PaG8i_4k&ui_locales=en-US&p=B2C_1A_signin_mobile-r2&redirect_uri=subway-mobile-app://auth/&client_id=efeb9bea-106d-4a27-acb4-c171474d4dda&state=TQ_AV62QpVCq-dpJcns_hl_OK78jsi7qKAmF6s08PNs"
