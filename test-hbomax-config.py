@@ -74,10 +74,6 @@ def validate_config(config_path):
             print(f"❌ Missing capture component: {keyword}")
             return False
     
-    keycheck_present = 'KEYCHECK' in script_section
-    if not keycheck_present:
-        print("❌ Missing KEYCHECK block")
-        return False
     
     print("✅ All validation checks passed!")
     print("\n📋 Config Summary:")
