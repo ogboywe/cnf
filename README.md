@@ -83,3 +83,6 @@ This configuration is designed for educational and security research purposes on
 
 ### Subway
 - **v1.0.0 [2025]** - Initial release with 5-block authentication flow and MVP Rewards capture
+
+### HBO Max
+- **v1.0.0 [2025]** - Initial release with OAuth-style authentication and subscription data capture
