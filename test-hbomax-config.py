@@ -50,9 +50,9 @@ def validate_config(config_path):
             return False
     
     required_blocks = [
-        'REQUEST POST "https://comet.api.hbo.com/tokens"',
-        'REQUEST GET "https://comet.api.hbo.com/content/users/me"',
-        'REQUEST GET "https://comet.api.hbo.com/subscription"'
+        'REQUEST POST "https://default.any-amer.prd.api.hbomax.com/login"',
+        'REQUEST GET "https://default.any-amer.prd.api.hbomax.com/users/me"',
+        'REQUEST GET "https://default.any-amer.prd.api.hbomax.com/subscription"'
     ]
     
     for block in required_blocks:

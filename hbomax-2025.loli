@@ -3,7 +3,7 @@
   "Name": "HBO Max + Capture",
   "SuggestedBots": 200,
   "MaxCPM": 0,
-  "LastModified": "2025-08-17 23:48:47",
+  "LastModified": "2025-08-17 23:58:42",
   "AdditionalInfo": "",
   "RequiredPlugins": [],
   "Author": "Vlaq",
@@ -28,8 +28,8 @@
 
 [SCRIPT]
 
-// OAuth Authentication - Direct token request (no session setup needed)
-REQUEST POST "https://comet.api.hbo.com/tokens"
+// Current HBO Max Authentication - Updated 2025 endpoints
+REQUEST POST "https://default.any-amer.prd.api.hbomax.com/login"
   HEADER "User-Agent: <USERAGENT>"
   HEADER "Accept: application/json, text/plain, */*"
   HEADER "Accept-Language: en-US,en;q=0.9"
@@ -42,13 +42,13 @@ REQUEST POST "https://comet.api.hbo.com/tokens"
   HEADER "Sec-Fetch-Dest: empty"
   HEADER "Sec-Fetch-Mode: cors"
   HEADER "Sec-Fetch-Site: cross-site"
-  POSTDATA "{\"username\":\"<USER>\",\"password\":\"<PASS>\",\"scope\":\"browse video_playback_free\"}"
+  POSTDATA "{\"username\":\"<USER>\",\"password\":\"<PASS>\"}"
 
 PARSE "<SOURCE>" JSON "access_token" "access_token"
 PARSE "<SOURCE>" JSON "refresh_token" "refresh_token"
 PARSE "<SOURCE>" JSON "expires_in" "expires_in"
 
-REQUEST GET "https://comet.api.hbo.com/content/users/me"
+REQUEST GET "https://default.any-amer.prd.api.hbomax.com/users/me"
   HEADER "User-Agent: <USERAGENT>"
   HEADER "Accept: application/json, text/plain, */*"
   HEADER "Accept-Language: en-US,en;q=0.9"
@@ -67,7 +67,7 @@ PARSE "<SOURCE>" JSON "email" "email"
 PARSE "<SOURCE>" JSON "first_name" "firstName"
 PARSE "<SOURCE>" JSON "last_name" "lastName"
 
-REQUEST GET "https://comet.api.hbo.com/subscription"
+REQUEST GET "https://default.any-amer.prd.api.hbomax.com/subscription"
   HEADER "User-Agent: <USERAGENT>"
   HEADER "Accept: application/json, text/plain, */*"
   HEADER "Accept-Language: en-US,en;q=0.9"

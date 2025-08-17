@@ -53,12 +53,11 @@ user@example.com:password123
 - Use proxy rotation more aggressively
 
 **API Changes**
-- The config is based on 2018 reverse engineering research
-- HBO Max has since rebranded to "Max" and may have updated endpoints
-- If authentication fails, endpoints may need updating:
-  - `comet.api.hbo.com` might have changed
-  - Authentication flow might have been modified
-  - Additional security measures may have been added
+- The config has been updated with current 2025 API endpoints
+- HBO Max now uses `default.any-amer.prd.api.hbomax.com` for authentication instead of the deprecated `comet.api.hbo.com`
+- The authentication endpoint has been updated from `/tokens` to `/login`
+- User profile and subscription endpoints have been updated to use the current API domain
+- If authentication still fails, additional security measures may have been added since the endpoint update
 
 **Token Expiration**
 - Access tokens have limited lifetime (check `expires_in` field)
@@ -97,5 +96,5 @@ Enable verbose logging in SilverBullet to see detailed request/response data for
 - This config is for educational/security testing purposes only
 - Ensure compliance with HBO Max/Max terms of service
 - Only test with accounts you own or have explicit permission to test
-- Be aware that HBO Max has rebranded to "Max" and API endpoints may have changed
-- The reverse engineering research this config is based on is from 2018
+- The config has been updated with current 2025 API endpoints discovered through network monitoring
+- API endpoints have been updated from deprecated `comet.api.hbo.com` to current `default.any-amer.prd.api.hbomax.com`
