@@ -75,7 +75,7 @@ REQUEST GET "https://auth.hbomax.com/login"
   HEADER "Sec-Fetch-Site: none"
   HEADER "Sec-Fetch-User: ?1"
 
-REQUEST POST "https://auth.hbomax.com/api/login"
+REQUEST POST "https://default.any-amer.prd.api.hbomax.com/login"
   CONTENT "email=<USER>&password=<PASS>&remember_me=false"
   CONTENTTYPE "application/x-www-form-urlencoded"
   HEADER "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
