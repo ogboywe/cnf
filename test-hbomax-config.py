@@ -43,13 +43,15 @@ def validate_config(config_path):
     
     script_section = content.split('[SCRIPT]')[1]
     
-    required_placeholders = ['<access_token>']
+    required_placeholders = ['<USER>', '<PASS>', '<access_token>']
     for placeholder in required_placeholders:
         if placeholder not in script_section:
             print(f"❌ Missing required placeholder: {placeholder}")
             return False
     
     required_blocks = [
+        'REQUEST POST "https://auth.hbomax.com/login"',
+        'REQUEST GET "https://default.any-any.prd.api.hbomax.com/session-context/headwaiter/v1/bootstrap"',
         'REQUEST GET "https://default.any-any.prd.api.hbomax.com/token?realm=bolt"',
         'REQUEST GET "https://default.beam-amer.prd.api.hbomax.com/users/me"',
         'REQUEST GET "https://default.any-any.prd.api.hbomax.com/entitlements/userEntitlementsSummary/me"'
@@ -61,6 +63,7 @@ def validate_config(config_path):
             return False
     
     capture_keywords = [
+        'DATA "email=<USER>&password=<PASS>"',
         'PARSE "<SOURCE>" JSON',
         'CAP "User ID: "',
         'CAP "Email: "',
