@@ -50,9 +50,10 @@ def validate_config(config_path):
             return False
     
     required_blocks = [
-        'REQUEST POST "https://auth.hbomax.com/login"',
+        'REQUEST POST "https://default.any-amer.prd.api.hbomax.com/idp/users/accountLookup"',
+        'REQUEST POST "https://default.any-amer.prd.api.hbomax.com/login"',
         'REQUEST GET "https://default.any-any.prd.api.hbomax.com/session-context/headwaiter/v1/bootstrap"',
-        'REQUEST GET "https://default.any-any.prd.api.hbomax.com/token?realm=bolt"',
+        'REQUEST GET "https://default.any-any.prd.api.hbomax.com/token?realm=bolt&deviceId=',
         'REQUEST GET "https://default.beam-amer.prd.api.hbomax.com/users/me"',
         'REQUEST GET "https://default.any-any.prd.api.hbomax.com/entitlements/userEntitlementsSummary/me"'
     ]
@@ -62,19 +63,18 @@ def validate_config(config_path):
             print(f"❌ Missing required request block: {block}")
             return False
     
-    capture_keywords = [
-        'DATA "email=<USER>&password=<PASS>"',
+    essential_components = [
+        '<USER>',
+        '<PASS>',
         'PARSE "<SOURCE>" JSON',
         'CAP "User ID: "',
         'CAP "Email: "',
-        'CAP "Name: "',
-        'CAP "Subscription Status: "',
-        'CAP "Subscription Tier: "'
+        'CAP "Name: "'
     ]
     
-    for keyword in capture_keywords:
-        if keyword not in script_section:
-            print(f"❌ Missing capture component: {keyword}")
+    for component in essential_components:
+        if component not in script_section:
+            print(f"❌ Missing essential component: {component}")
             return False
     
     

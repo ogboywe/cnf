@@ -29,25 +29,42 @@
 [SCRIPT]
 
 // HBO Max Authentication - Multi-step flow discovered through network monitoring
-// Step 1: Credential submission (form-based authentication to establish session)
-REQUEST POST "https://auth.hbomax.com/login"
+// BREAKTHROUGH: Found the actual credential submission endpoint through enhanced network monitoring!
+// The correct endpoint is default.any-amer.prd.api.hbomax.com/login (NOT auth.hbomax.com/login)
+// 
+// Step 1: Account lookup (validates email exists)
+REQUEST POST "https://default.any-amer.prd.api.hbomax.com/idp/users/accountLookup"
   HEADER "User-Agent: <USERAGENT>"
-  HEADER "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7"
+  HEADER "Accept: application/json, text/plain, */*"
   HEADER "Accept-Language: en-US,en;q=0.9"
   HEADER "Accept-Encoding: gzip, deflate, br"
-  HEADER "Content-Type: application/x-www-form-urlencoded"
+  HEADER "Content-Type: application/json"
   HEADER "Origin: https://auth.hbomax.com"
   HEADER "Referer: https://auth.hbomax.com/login"
   HEADER "DNT: 1"
   HEADER "Connection: keep-alive"
-  HEADER "Upgrade-Insecure-Requests: 1"
-  HEADER "Sec-Fetch-Dest: document"
-  HEADER "Sec-Fetch-Mode: navigate"
-  HEADER "Sec-Fetch-Site: same-origin"
-  HEADER "Sec-Fetch-User: ?1"
-  DATA "email=<USER>&password=<PASS>"
+  HEADER "Sec-Fetch-Dest: empty"
+  HEADER "Sec-Fetch-Mode: cors"
+  HEADER "Sec-Fetch-Site: cross-site"
+  DATA "{\"username\":\"<USER>\"}"
 
-// Step 2: Establish session context (required before token request)
+// Step 2: Credential submission (actual login with email/password)
+REQUEST POST "https://default.any-amer.prd.api.hbomax.com/login"
+  HEADER "User-Agent: <USERAGENT>"
+  HEADER "Accept: application/json, text/plain, */*"
+  HEADER "Accept-Language: en-US,en;q=0.9"
+  HEADER "Accept-Encoding: gzip, deflate, br"
+  HEADER "Content-Type: application/json"
+  HEADER "Origin: https://auth.hbomax.com"
+  HEADER "Referer: https://auth.hbomax.com/login"
+  HEADER "DNT: 1"
+  HEADER "Connection: keep-alive"
+  HEADER "Sec-Fetch-Dest: empty"
+  HEADER "Sec-Fetch-Mode: cors"
+  HEADER "Sec-Fetch-Site: cross-site"
+  DATA "{\"credentials\":{\"username\":\"<USER>\",\"password\":\"<PASS>\"}}"
+
+// Step 3: Establish session context (required before token request)
 REQUEST GET "https://default.any-any.prd.api.hbomax.com/session-context/headwaiter/v1/bootstrap"
   HEADER "User-Agent: <USERAGENT>"
   HEADER "Accept: application/json, text/plain, */*"
@@ -61,8 +78,8 @@ REQUEST GET "https://default.any-any.prd.api.hbomax.com/session-context/headwait
   HEADER "Sec-Fetch-Mode: cors"
   HEADER "Sec-Fetch-Site: cross-site"
 
-// Step 3: Get authentication token (now with proper request context)
-REQUEST GET "https://default.any-any.prd.api.hbomax.com/token?realm=bolt"
+// Step 4: Get authentication token (now with proper request context and device ID)
+REQUEST GET "https://default.any-any.prd.api.hbomax.com/token?realm=bolt&deviceId=0c7b5ba7-50cc-4f4f-b9c4-387ab4f17591"
   HEADER "User-Agent: <USERAGENT>"
   HEADER "Accept: application/json, text/plain, */*"
   HEADER "Accept-Language: en-US,en;q=0.9"
@@ -79,6 +96,7 @@ PARSE "<SOURCE>" JSON "access_token" "access_token"
 PARSE "<SOURCE>" JSON "refresh_token" "refresh_token"
 PARSE "<SOURCE>" JSON "expires_in" "expires_in"
 
+// Step 5: Get user profile data
 REQUEST GET "https://default.beam-amer.prd.api.hbomax.com/users/me"
   HEADER "User-Agent: <USERAGENT>"
   HEADER "Accept: application/json, text/plain, */*"
@@ -98,6 +116,7 @@ PARSE "<SOURCE>" JSON "email" "email"
 PARSE "<SOURCE>" JSON "first_name" "firstName"
 PARSE "<SOURCE>" JSON "last_name" "lastName"
 
+// Step 6: Get subscription/entitlements data
 REQUEST GET "https://default.any-any.prd.api.hbomax.com/entitlements/userEntitlementsSummary/me"
   HEADER "User-Agent: <USERAGENT>"
   HEADER "Accept: application/json, text/plain, */*"
