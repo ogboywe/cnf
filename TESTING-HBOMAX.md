@@ -31,14 +31,12 @@ user@example.com:password123
 3. Monitor for the following scenarios:
 
 **Simple Authentication Flow:**
-The config follows the same simple pattern as other working configs in the repo:
-1. **Session Setup**: GET to `https://auth.hbomax.com/login` to establish session and get login page
-2. **Main Login**: POST to `https://auth.hbomax.com/api/login` with form data (email, password)
-3. **Account Data**: GET to `https://play.hbomax.com/api/account/profile` to retrieve subscription and profile information
+The config follows the same simple pattern as other working configs in the repo (like Kohl's):
+1. **Main Login**: POST to `https://default.any-amer.prd.api.hbomax.com/login` with form data (email, password)
 
 #### Expected Success Output
 ```
-[HIT][proxy_ip] user@example.com:password123 - [User ID: 12345][Email: user@example.com][Name: John Doe][Subscription Status: active][Subscription Tier: premium][Expiry Date: 2025-12-31][Billing Cycle: monthly]
+[HIT][proxy_ip] user@example.com:password123
 ```
 
 #### Potential Issues and Solutions
@@ -78,12 +76,11 @@ The config follows the same simple pattern as other working configs in the repo:
 
 ### 5. Validation Checklist
 - [ ] Config loads without syntax errors
-- [ ] Session setup succeeds (Block 1: GET to auth.hbomax.com/login) - ESTABLISHES SESSION
-- [ ] Main login succeeds (Block 2: POST to auth.hbomax.com/api/login with form data) - AUTHENTICATES USER
-- [ ] Account data retrieval succeeds (Block 3: GET to play.hbomax.com/api/account/profile) - CAPTURES SUBSCRIPTION INFO
-- [ ] All capture rules extract data properly (User ID, Email, Subscription Status, Tier, Expiry Date)
+- [ ] Main login succeeds (POST to default.any-amer.prd.api.hbomax.com/login with form data) - AUTHENTICATES USER
+- [ ] No "Index was outside the bounds of the array" errors occur during execution
+- [ ] Config properly detects login success/failure without parsing errors
 
-**CURRENT STATUS**: HBO Max config simplified to follow the exact same pattern as other working configs in the repo! Uses simple 3-step flow: GET login page → POST credentials with form data → GET account info. Ready for testing with credentials james21trill@icloud.com:Easypass1!
+**CURRENT STATUS**: HBO Max config simplified to follow the exact same pattern as the working Kohl's config in the repo! Uses simple single-request flow: POST credentials directly to authentication endpoint. This avoids HTML parsing issues that were causing "Index was outside the bounds of the array" errors. Ready for testing with credentials james21trill@icloud.com:Easypass1!
 
 ## Troubleshooting
 

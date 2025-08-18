@@ -50,9 +50,7 @@ def validate_config(config_path):
             return False
     
     required_blocks = [
-        'REQUEST GET "https://auth.hbomax.com/login"',
-        'REQUEST POST "https://default.any-amer.prd.api.hbomax.com/login"',
-        'REQUEST GET "https://play.hbomax.com/api/account/profile"'
+        'REQUEST POST "https://default.any-amer.prd.api.hbomax.com/login"'
     ]
     
     for block in required_blocks:
