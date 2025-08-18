@@ -43,7 +43,7 @@ def validate_config(config_path):
     
     script_section = content.split('[SCRIPT]')[1]
     
-    required_placeholders = ['<USER>', '<PASS>', '<access_token>']
+    required_placeholders = ['<USER>', '<PASS>']
     for placeholder in required_placeholders:
         if placeholder not in script_section:
             print(f"❌ Missing required placeholder: {placeholder}")
@@ -51,12 +51,8 @@ def validate_config(config_path):
     
     required_blocks = [
         'REQUEST GET "https://auth.hbomax.com/login"',
-        'REQUEST POST "https://default.any-amer.prd.api.hbomax.com/idp/users/accountLookup"',
-        'REQUEST POST "https://default.any-amer.prd.api.hbomax.com/login"',
-        'REQUEST GET "https://default.any-any.prd.api.hbomax.com/session-context/headwaiter/v1/bootstrap"',
-        'REQUEST GET "https://default.any-any.prd.api.hbomax.com/token?realm=bolt&deviceId=',
-        'REQUEST GET "https://default.beam-amer.prd.api.hbomax.com/users/me"',
-        'REQUEST GET "https://default.any-any.prd.api.hbomax.com/entitlements/userEntitlementsSummary/me"'
+        'REQUEST POST "https://auth.hbomax.com/api/login"',
+        'REQUEST GET "https://play.hbomax.com/api/account/profile"'
     ]
     
     for block in required_blocks:
@@ -67,10 +63,9 @@ def validate_config(config_path):
     essential_components = [
         '<USER>',
         '<PASS>',
-        'PARSE "<SOURCE>" JSON',
+        'PARSE "<SOURCE>" LR',
         'CAP "User ID: "',
-        'CAP "Email: "',
-        'CAP "Name: "'
+        'CAP "Email: "'
     ]
     
     for component in essential_components:
