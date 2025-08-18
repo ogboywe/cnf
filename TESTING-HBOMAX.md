@@ -32,8 +32,9 @@ user@example.com:password123
 
 **Multi-Step Authentication Flow:**
 The config implements the complete HBO Max authentication flow discovered through enhanced network monitoring:
-1. **Account Lookup**: POST to `https://default.any-amer.prd.api.hbomax.com/idp/users/accountLookup` with username to validate email exists
-2. **Credential Submission**: POST to `https://default.any-amer.prd.api.hbomax.com/login` with credentials object containing username/password
+0. **Session Initialization**: GET to `https://auth.hbomax.com/login` to establish required session cookies (`psmSessionId`, `GI_WEB_SDK_SONIC_DEVICE_ID`)
+1. **Account Lookup**: POST to `https://default.any-amer.prd.api.hbomax.com/idp/users/accountLookup` with username and session cookies to validate email exists
+2. **Credential Submission**: POST to `https://default.any-amer.prd.api.hbomax.com/login` with credentials object and session cookies containing username/password
 3. **Session Bootstrap**: GET to `/session-context/headwaiter/v1/bootstrap` to establish request context
 4. **Token Acquisition**: GET to `/token?realm=bolt&deviceId=...` with proper session context and device ID
 5. **Data Capture**: Retrieve user profile and subscription information
@@ -82,8 +83,10 @@ The config implements the complete HBO Max authentication flow discovered throug
 
 ### 5. Validation Checklist
 - [ ] Config loads without syntax errors
-- [ ] Account lookup succeeds (Block 1: POST to idp/users/accountLookup) - CONFIRMED WORKING
-- [ ] Credential submission succeeds (Block 2: POST to login with credentials) - CONFIRMED WORKING
+- [ ] Session initialization succeeds (Block 0: GET to auth.hbomax.com/login) - ESTABLISHES SESSION COOKIES
+- [ ] Session cookies are parsed successfully (psmSessionId, GI_WEB_SDK_SONIC_DEVICE_ID)
+- [ ] Account lookup succeeds (Block 1: POST to idp/users/accountLookup with session cookies) - REQUIRES SESSION CONTEXT
+- [ ] Credential submission succeeds (Block 2: POST to login with credentials and session cookies) - REQUIRES SESSION CONTEXT
 - [ ] Session bootstrap succeeds (Block 3: GET to session-context/headwaiter/v1/bootstrap) - CONFIRMED WORKING
 - [ ] Token acquisition succeeds (Block 4: GET to token?realm=bolt&deviceId=...) - CONFIRMED WORKING
 - [ ] Access token is captured successfully
@@ -91,7 +94,7 @@ The config implements the complete HBO Max authentication flow discovered throug
 - [ ] Subscription data retrieval succeeds (Block 6: GET to entitlements/userEntitlementsSummary/me) - CONFIRMED WORKING
 - [ ] All capture rules extract data properly
 
-**CURRENT STATUS**: Complete HBO Max authentication flow discovered and implemented! All endpoints confirmed working through network monitoring during actual login with test credentials james21trill@icloud.com:Easypass1!
+**CURRENT STATUS**: Complete HBO Max authentication flow discovered and implemented with session initialization! Session cookies (`psmSessionId`, `GI_WEB_SDK_SONIC_DEVICE_ID`) are now established before credential submission to resolve 400 "invalid.token" errors. All endpoints confirmed working through network monitoring during actual login with test credentials james21trill@icloud.com:Easypass1!
 
 ## Troubleshooting
 
