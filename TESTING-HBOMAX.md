@@ -53,11 +53,13 @@ user@example.com:password123
 - Use proxy rotation more aggressively
 
 **API Changes**
-- The config has been updated with current 2025 API endpoints
-- HBO Max now uses `default.any-amer.prd.api.hbomax.com` for authentication instead of the deprecated `comet.api.hbo.com`
-- The authentication endpoint has been updated from `/tokens` to `/login`
-- User profile and subscription endpoints have been updated to use the current API domain
-- If authentication still fails, additional security measures may have been added since the endpoint update
+- The config has been updated with current 2025 API endpoints discovered through network monitoring of successful HBO Max authentication
+- HBO Max now uses multiple API subdomains: `default.any-any.prd.api.hbomax.com` and `default.beam-amer.prd.api.hbomax.com`
+- The authentication endpoint is now `https://default.any-any.prd.api.hbomax.com/token?realm=bolt` (GET request, not POST)
+- User profile endpoint: `https://default.beam-amer.prd.api.hbomax.com/users/me`
+- Subscription/entitlements endpoint: `https://default.any-any.prd.api.hbomax.com/entitlements/userEntitlementsSummary/me`
+- Authentication flow uses token-based authentication with realm=bolt parameter
+- All endpoints discovered through real network monitoring during successful login with valid credentials
 
 **Token Expiration**
 - Access tokens have limited lifetime (check `expires_in` field)

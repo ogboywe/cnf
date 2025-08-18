@@ -43,16 +43,16 @@ def validate_config(config_path):
     
     script_section = content.split('[SCRIPT]')[1]
     
-    required_placeholders = ['<USER>', '<PASS>', '<access_token>']
+    required_placeholders = ['<access_token>']
     for placeholder in required_placeholders:
         if placeholder not in script_section:
             print(f"❌ Missing required placeholder: {placeholder}")
             return False
     
     required_blocks = [
-        'REQUEST POST "https://default.any-amer.prd.api.hbomax.com/login"',
-        'REQUEST GET "https://default.any-amer.prd.api.hbomax.com/users/me"',
-        'REQUEST GET "https://default.any-amer.prd.api.hbomax.com/subscription"'
+        'REQUEST GET "https://default.any-any.prd.api.hbomax.com/token?realm=bolt"',
+        'REQUEST GET "https://default.beam-amer.prd.api.hbomax.com/users/me"',
+        'REQUEST GET "https://default.any-any.prd.api.hbomax.com/entitlements/userEntitlementsSummary/me"'
     ]
     
     for block in required_blocks:

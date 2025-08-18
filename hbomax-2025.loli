@@ -3,7 +3,7 @@
   "Name": "HBO Max + Capture",
   "SuggestedBots": 200,
   "MaxCPM": 0,
-  "LastModified": "2025-08-17 23:58:42",
+  "LastModified": "2025-08-18 00:10:13",
   "AdditionalInfo": "",
   "RequiredPlugins": [],
   "Author": "Vlaq",
@@ -28,27 +28,25 @@
 
 [SCRIPT]
 
-// Current HBO Max Authentication - Updated 2025 endpoints
-REQUEST POST "https://default.any-amer.prd.api.hbomax.com/login"
+// Current HBO Max Authentication - Updated 2025 endpoints from network monitoring
+REQUEST GET "https://default.any-any.prd.api.hbomax.com/token?realm=bolt"
   HEADER "User-Agent: <USERAGENT>"
   HEADER "Accept: application/json, text/plain, */*"
   HEADER "Accept-Language: en-US,en;q=0.9"
   HEADER "Accept-Encoding: gzip, deflate, br"
-  HEADER "Content-Type: application/json"
-  HEADER "Origin: https://auth.hbomax.com"
-  HEADER "Referer: https://auth.hbomax.com/"
+  HEADER "Origin: https://play.hbomax.com"
+  HEADER "Referer: https://play.hbomax.com/"
   HEADER "DNT: 1"
   HEADER "Connection: keep-alive"
   HEADER "Sec-Fetch-Dest: empty"
   HEADER "Sec-Fetch-Mode: cors"
   HEADER "Sec-Fetch-Site: cross-site"
-  POSTDATA "{\"username\":\"<USER>\",\"password\":\"<PASS>\"}"
 
 PARSE "<SOURCE>" JSON "access_token" "access_token"
 PARSE "<SOURCE>" JSON "refresh_token" "refresh_token"
 PARSE "<SOURCE>" JSON "expires_in" "expires_in"
 
-REQUEST GET "https://default.any-amer.prd.api.hbomax.com/users/me"
+REQUEST GET "https://default.beam-amer.prd.api.hbomax.com/users/me"
   HEADER "User-Agent: <USERAGENT>"
   HEADER "Accept: application/json, text/plain, */*"
   HEADER "Accept-Language: en-US,en;q=0.9"
@@ -67,7 +65,7 @@ PARSE "<SOURCE>" JSON "email" "email"
 PARSE "<SOURCE>" JSON "first_name" "firstName"
 PARSE "<SOURCE>" JSON "last_name" "lastName"
 
-REQUEST GET "https://default.any-amer.prd.api.hbomax.com/subscription"
+REQUEST GET "https://default.any-any.prd.api.hbomax.com/entitlements/userEntitlementsSummary/me"
   HEADER "User-Agent: <USERAGENT>"
   HEADER "Accept: application/json, text/plain, */*"
   HEADER "Accept-Language: en-US,en;q=0.9"
